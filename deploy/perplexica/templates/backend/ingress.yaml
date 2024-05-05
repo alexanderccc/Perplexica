@@ -1,0 +1,29 @@
+{{- $component := "backend" }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "perplexica.fullname" . }}-{{ $component }}
+  labels:
+    {{- include "perplexica.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ $component }}
+  annotations:
+    konghq.com/https-redirect-status-code: '308'
+    konghq.com/protocols: https
+    cert-manager.io/cluster-issuer: ai-inter-ca
+spec:
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  tls:
+    - hosts:
+        - perplexica-be.ai.home
+      secretName: perplexica-cert
+  rules:
+    - host: perplexica-be.ai.home
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "perplexica.fullname" . }}-{{ $component }}
+                port:
+                  name: http

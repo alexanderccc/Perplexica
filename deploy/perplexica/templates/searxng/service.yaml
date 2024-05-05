@@ -1,0 +1,19 @@
+{{- $component := "searxng" }}
+{{- $port := 4000 }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "perplexica.fullname" . }}-{{ $component }}
+  labels:
+    {{- include "perplexica.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ $component }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ $port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "perplexica.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ $component }}

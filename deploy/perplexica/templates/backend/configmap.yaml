@@ -1,0 +1,21 @@
+{{- $component := "backend" }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "perplexica.fullname" . }}-{{ $component }}-config
+  labels:
+    {{- include "perplexica.labels" . | nindent 4 }}
+    app.kubernetes.io/component: {{ $component }}
+data:
+  config.toml: |
+    [GENERAL]
+    PORT = 3001 # Port to run the server on
+    SIMILARITY_MEASURE = "cosine" # "cosine" or "dot"
+
+    [API_KEYS]
+    OPENAI = "" # OpenAI API key - sk-1234567890abcdef1234567890abcdef
+    GROQ = "" # Groq API key - gsk_1234567890abcdef1234567890abcdef
+
+    [API_ENDPOINTS]
+    SEARXNG = "http://localhost:32768" # SearxNG API URL
+    OLLAMA = "http://ollama.hub-ollama:11434" # Ollama API URL - http://host.docker.internal:11434
