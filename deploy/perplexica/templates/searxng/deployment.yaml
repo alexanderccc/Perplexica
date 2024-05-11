@@ -1,17 +1,21 @@
 {{- $component := "searxng" }}
-{{- $port := 4000 }}
+{{- $port := 8080 }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "perplexica.fullname" . }}-{{ $component }}
   labels:
     {{- include "perplexica.labels" . | nindent 4 }}
+    app.kubernetes.io/name: {{ $component }}
+    app.kubernetes.io/app: {{ $component }}
     app.kubernetes.io/component: {{ $component }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       {{- include "perplexica.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: {{ $component }}
+      app.kubernetes.io/app: {{ $component }}
       app.kubernetes.io/component: {{ $component }}
   template:
     metadata:
@@ -21,6 +25,8 @@ spec:
       {{- end }}
       labels:
         {{- include "perplexica.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: {{ $component }}
+        app.kubernetes.io/app: {{ $component }}
         app.kubernetes.io/component: {{ $component }}
     spec:
       {{- with .Values.imagePullSecrets }}

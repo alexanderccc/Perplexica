@@ -46,7 +46,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "perplexica.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "perplexica.name" . }}
+app.kubernetes.io/stack: {{ include "perplexica.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
